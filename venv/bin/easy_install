@@ -1,4 +1,4 @@
-#!/Users/kacem/Downloads/test/venv/bin/python3
+#!/home/kacem/Desktop/projects/python_projects/store-report/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

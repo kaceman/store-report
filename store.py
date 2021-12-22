@@ -3,7 +3,7 @@ import mysql.connector
 
 cnx = mysql.connector.connect(
         host="localhost",
-        port=8889,
+        port=3307,
         user="root",
         password="root",
         database="test_selenium"
@@ -37,11 +37,19 @@ sql = "INSERT INTO senario (name, passed, failed, error, skipped, xfailed, xpass
 val = (nameSenario, passed, failed, error, skipped, xfailed, xpassed, num_tests, duration, created_at)
 cursor.execute(sql, val)
 
-#for test in tests:
-#    nameParts = test['name'].split("::")
-#    name = nameParts[2]
-#    duration = test['duration']
-#    outcome = test['outcome']
+senario_id = cursor.lastrowid
+
+for test in tests:
+   nameParts = test['name'].split("::")
+   name = nameParts[2]
+   duration = test['duration']
+   outcome = test['outcome']
+   sql = "INSERT INTO test (name, outcome, duration, senario_id) VALUES (%s, %s, %s, %s)"
+   val = (name, outcome, duration, senario_id)
+   cursor.execute(sql, val)
+
+
+cnx.commit()
 
 cnx.close()
 f.close()
