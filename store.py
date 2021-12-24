@@ -1,5 +1,6 @@
 import json
 import mysql.connector
+from datetime import datetime
 
 cnx = mysql.connector.connect(
         host="localhost",
@@ -30,26 +31,30 @@ if len(tests) > 0:
     test = data['report']['tests'][0]
     nameParts = test['name'].split("::")
     nameSenario = nameParts[0]
+created_at_datetime = datetime.strptime(created_at, '%Y-%m-%d %H:%M:%S.%f').strftime('%Y-%m-%d %H:%M:%S')
+sql = "SELECT * FROM senario WHERE name = '" + nameSenario + "' AND created_at = '" + created_at_datetime + "'"
+cursor.execute(sql)
+existingSenario = cursor.fetchone()
 
-# insert senario
+if existingSenario == None:
+    # insert senario
 
-sql = "INSERT INTO senario (name, passed, failed, error, skipped, xfailed, xpassed, num_tests, duration, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-val = (nameSenario, passed, failed, error, skipped, xfailed, xpassed, num_tests, duration, created_at)
-cursor.execute(sql, val)
+    sql = "INSERT INTO senario (name, passed, failed, error, skipped, xfailed, xpassed, num_tests, duration, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    val = (nameSenario, passed, failed, error, skipped, xfailed, xpassed, num_tests, duration, created_at)
+    cursor.execute(sql, val)
 
-senario_id = cursor.lastrowid
+    senario_id = cursor.lastrowid
 
-for test in tests:
-   nameParts = test['name'].split("::")
-   name = nameParts[2]
-   duration = test['duration']
-   outcome = test['outcome']
-   sql = "INSERT INTO test (name, outcome, duration, senario_id) VALUES (%s, %s, %s, %s)"
-   val = (name, outcome, duration, senario_id)
-   cursor.execute(sql, val)
+    for test in tests:
+        nameParts = test['name'].split("::")
+        name = nameParts[2]
+        duration = test['duration']
+        outcome = test['outcome']
+        sql = "INSERT INTO test (name, outcome, duration, senario_id) VALUES (%s, %s, %s, %s)"
+        val = (name, outcome, duration, senario_id)
+        cursor.execute(sql, val)
 
-
-cnx.commit()
+    cnx.commit()
 
 cnx.close()
 f.close()
