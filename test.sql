@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `senario` (
   `xpassed` int(11)  NULL default 0,
   `num_tests` int(11)  NULL default 0,
   `duration` varchar(100)  NULL,
-  `created_at` datetime NOT NULL,
+  `created_at` datetime(6) NOT NULL,
    PRIMARY KEY  (`id`)
 );
 
