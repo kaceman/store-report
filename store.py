@@ -31,8 +31,7 @@ if len(tests) > 0:
     test = data['report']['tests'][0]
     nameParts = test['name'].split("::")
     nameSenario = nameParts[0]
-created_at_datetime = datetime.strptime(created_at, '%Y-%m-%d %H:%M:%S.%f').strftime('%Y-%m-%d %H:%M:%S')
-sql = "SELECT * FROM senario WHERE name = '" + nameSenario + "' AND created_at = '" + created_at_datetime + "'"
+sql = "SELECT * FROM senario WHERE name = '" + nameSenario + "' AND created_at = '" + created_at + "'"
 cursor.execute(sql)
 existingSenario = cursor.fetchone()
 
